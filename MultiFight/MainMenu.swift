@@ -9,6 +9,10 @@
 import Foundation
 import SpriteKit
 
+enum GameState {
+    case Ready, Playing, GameOver
+}
+
 class MainMenu: SKScene {
     
     var button1 : MSButtonNode!
