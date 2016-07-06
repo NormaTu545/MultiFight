@@ -12,7 +12,7 @@ class Card: SKSpriteNode  {
     
     var cardNumber : SKLabelNode!
     
-    var number: Int = Int(arc4random_uniform(49) + 1) {
+    var number: Int = 1 {
         //Updates number label on card every time it is set
         didSet {
             cardNumber.text = String(number)

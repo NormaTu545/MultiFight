@@ -1,4 +1,3 @@
-//
 //  GameScene.swift
 //  MultiFight
 //
@@ -10,9 +9,9 @@
 
 import SpriteKit
 
-//1-50 range of easy
-//1-100 range of medium
-//50 - 150 range of hard
+//1 - 20 range of easy
+//1 - 50 range of medium
+//1 - 100 range of hard
 //More time rewarded for harder cards in stack
 enum Difficulty {
     case Easy, Medium, Hard
@@ -83,6 +82,9 @@ class SingleScene: SKScene {
         tap = UITapGestureRecognizer(target: self, action: #selector(SingleScene.onTap(_:)))
         view.addGestureRecognizer(tap)
         
+        cardBase.connectNumber()
+        cardBase.number = Int(arc4random_uniform(9) + 1)//starting card is randomized
+        
         cardStack.append(cardBase)
         addRandomCards(2)
         
@@ -144,7 +146,7 @@ class SingleScene: SKScene {
             if card.number % randomMultiple != 0 {
                 score += 1
                 //add time
-                health += 0.1
+                health += 0.05
             }
             //removes time if you swipe a multiple
             else {
