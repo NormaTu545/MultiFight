@@ -12,7 +12,7 @@ class Card: SKSpriteNode  {
     
     var cardNumber : SKLabelNode!
     
-    var number: Int = 1 {
+    var number: Int = Int(arc4random_uniform(49) + 1) {
         //Updates number label on card every time it is set
         didSet {
             cardNumber.text = String(number)
@@ -29,5 +29,14 @@ class Card: SKSpriteNode  {
     
     func connectNumber() {
         cardNumber = self.childNodeWithName("cardNumber") as! SKLabelNode
+    }
+    
+    func flip(actionName: String) {
+        let flip = SKAction(named: actionName)!
+        
+        let remove = SKAction.removeFromParent()
+        
+        let sequence = SKAction.sequence([flip, remove])
+        runAction(sequence)
     }
 }

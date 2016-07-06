@@ -34,6 +34,7 @@
 		AD5347521D2C5FEA00FBF7B1 /* MultiScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD5347511D2C5FEA00FBF7B1 /* MultiScene.swift */; };
 		AD5347541D2C602900FBF7B1 /* MultiScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = AD5347531D2C602900FBF7B1 /* MultiScene.sks */; };
 		AD5347561D2C641500FBF7B1 /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD5347551D2C641500FBF7B1 /* Card.swift */; };
+		AD53477A1D2D7ED900FBF7B1 /* AnimationActions.sks in Resources */ = {isa = PBXBuildFile; fileRef = AD5347791D2D7ED900FBF7B1 /* AnimationActions.sks */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -66,6 +67,7 @@
 		AD5347511D2C5FEA00FBF7B1 /* MultiScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MultiScene.swift; sourceTree = "<group>"; };
 		AD5347531D2C602900FBF7B1 /* MultiScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = MultiScene.sks; sourceTree = "<group>"; };
 		AD5347551D2C641500FBF7B1 /* Card.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
+		AD5347791D2D7ED900FBF7B1 /* AnimationActions.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = AnimationActions.sks; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,6 +101,7 @@
 		AD5347161D2C56AB00FBF7B1 /* MultiFight */ = {
 			isa = PBXGroup;
 			children = (
+				AD5347791D2D7ED900FBF7B1 /* AnimationActions.sks */,
 				AD5347171D2C56AB00FBF7B1 /* AppDelegate.swift */,
 				AD5347551D2C641500FBF7B1 /* Card.swift */,
 				AD5347191D2C56AB00FBF7B1 /* SingleScene.sks */,
@@ -178,6 +181,7 @@
 				TargetAttributes = {
 					AD5347131D2C56AB00FBF7B1 = {
 						CreatedOnToolsVersion = 7.3.1;
+						DevelopmentTeam = 74LTR4YUNB;
 					};
 				};
 			};
@@ -208,6 +212,7 @@
 				AD5347541D2C602900FBF7B1 /* MultiScene.sks in Resources */,
 				AD5347261D2C56AB00FBF7B1 /* LaunchScreen.storyboard in Resources */,
 				AD5347231D2C56AB00FBF7B1 /* Assets.xcassets in Resources */,
+				AD53477A1D2D7ED900FBF7B1 /* AnimationActions.sks in Resources */,
 				AD5347501D2C5AEA00FBF7B1 /* Copperplate.ttc in Resources */,
 				AD5347301D2C57CE00FBF7B1 /* MainMenu.sks in Resources */,
 				AD5347211D2C56AB00FBF7B1 /* Main.storyboard in Resources */,
@@ -355,10 +360,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = MultiFight/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.normatu.MultiFight;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
 		};
@@ -366,10 +374,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = MultiFight/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.normatu.MultiFight;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
 		};
@@ -392,6 +403,7 @@
 				AD53472C1D2C56AB00FBF7B1 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
