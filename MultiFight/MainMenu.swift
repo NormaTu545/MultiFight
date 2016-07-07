@@ -18,6 +18,10 @@ class MainMenu: SKScene {
     var button1 : MSButtonNode!
     var button2 : MSButtonNode!
     
+    
+    
+    
+    
     override func didMoveToView(view: SKView) {
         button1 = self.childNodeWithName("button1") as! MSButtonNode
         button2 = self.childNodeWithName("button2") as! MSButtonNode

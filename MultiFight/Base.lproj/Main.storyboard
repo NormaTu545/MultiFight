@@ -1,25 +1,52 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="8118" systemVersion="15A172" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BV1-FR-VrT">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BV1-FR-VrT">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8098"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
     </dependencies>
     <scenes>
         <!--Game View Controller-->
         <scene sceneID="tXr-a1-R10">
             <objects>
-                <viewController id="BV1-FR-VrT" customClass="GameViewController" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BV1-FR-VrT" customClass="GameViewController" customModule="MultiFight" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="8aa-yV-Osq"/>
                         <viewControllerLayoutGuide type="bottom" id="qHh-Mt-9TT"/>
                     </layoutGuides>
                     <view key="view" multipleTouchEnabled="YES" contentMode="scaleToFill" id="3se-qz-xqx" customClass="SKView">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="0" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xsE-Uw-a1C">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="239.5"/>
+                                <color key="backgroundColor" red="1" green="0.0" blue="0.85566986243183152" alpha="0.0" colorSpace="calibratedRGB"/>
+                            </view>
+                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cAz-tf-fyJ">
+                                <rect key="frame" x="0.0" y="238" width="320" height="242"/>
+                                <color key="backgroundColor" red="0.0028394792257889767" green="1" blue="0.0044057105546294606" alpha="0.0" colorSpace="calibratedRGB"/>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="cAz-tf-fyJ" secondAttribute="trailing" id="DRn-dh-eck"/>
+                            <constraint firstItem="cAz-tf-fyJ" firstAttribute="leading" secondItem="3se-qz-xqx" secondAttribute="leading" id="NqJ-d5-9N3"/>
+                            <constraint firstItem="xsE-Uw-a1C" firstAttribute="height" secondItem="cAz-tf-fyJ" secondAttribute="height" id="SFu-aW-4ee"/>
+                            <constraint firstItem="cAz-tf-fyJ" firstAttribute="top" secondItem="xsE-Uw-a1C" secondAttribute="bottom" constant="1" id="W5Q-OM-arr"/>
+                            <constraint firstItem="xsE-Uw-a1C" firstAttribute="top" secondItem="3se-qz-xqx" secondAttribute="top" id="d2T-tV-9vm"/>
+                            <constraint firstItem="qHh-Mt-9TT" firstAttribute="top" secondItem="cAz-tf-fyJ" secondAttribute="bottom" id="ejI-HK-zuZ"/>
+                            <constraint firstAttribute="trailing" secondItem="xsE-Uw-a1C" secondAttribute="trailing" id="sOV-jP-5Vu"/>
+                            <constraint firstItem="xsE-Uw-a1C" firstAttribute="leading" secondItem="3se-qz-xqx" secondAttribute="leading" id="xEQ-uW-bWW"/>
+                        </constraints>
                     </view>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
+                    <connections>
+                        <outlet property="lowerView" destination="cAz-tf-fyJ" id="01E-x8-Eh4"/>
+                        <outlet property="upperView" destination="xsE-Uw-a1C" id="KhW-fx-GFd"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SZV-WD-TEh" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="208" y="196"/>
         </scene>
     </scenes>
 </document>

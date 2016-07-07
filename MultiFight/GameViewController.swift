@@ -10,9 +10,21 @@ import UIKit
 import SpriteKit
 
 class GameViewController: UIViewController {
+    
+    
+    @IBOutlet weak var upperView: UIView!
+    @IBOutlet weak var lowerView: UIView!
+    
+    
+    static var topView: UIView!
+    static var bottomView: UIView!
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        GameViewController.topView = upperView
+        GameViewController.bottomView = lowerView
 
         if let scene = MainMenu(fileNamed:"MainMenu") {
             // Configure the view.

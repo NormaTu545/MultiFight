@@ -142,6 +142,7 @@ class SingleScene: SKScene {
     func removeCard(actionName: String, swipe: Bool) {
         let firstCard = cardStack.first as Card!
         checkCard(firstCard, swipe: swipe)
+        firstCard?.zPosition += 1
         firstCard?.flip(actionName)
         
         cardStack.removeFirst()
@@ -155,12 +156,16 @@ class SingleScene: SKScene {
             if card.number % randomMultiple != 0 {
                 score += 1
                 //add time
-                health += 0.05
+                health += 0.0025
+                card.color = UIColor.greenColor()
+                //CORRECT DING SOUND EFFECT HERE
             }
             //removes time if you swipe a multiple
             else {
                 //decrease time
                 health -= 0.1
+                card.color = UIColor.redColor()
+
             }
         }
         else {
@@ -169,11 +174,13 @@ class SingleScene: SKScene {
                 score += 1
                 //add time
                 health += 0.1
+                card.color = UIColor.greenColor()
             }
             //removes time if you tap a non-multiple
             else {
                 //decrease time
                 health -= 0.1
+                card.color = UIColor.redColor()
             }
         }
         checkScore()
@@ -268,7 +275,7 @@ class SingleScene: SKScene {
         }
         
         //Naturally decreases time
-        health -= 0.0025
+        health -= 0.001
         
         if health <= 0 {
             //end game

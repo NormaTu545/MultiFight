@@ -9,7 +9,7 @@
 import SpriteKit
 import GameplayKit
 
-class MultiScene: SKScene {
+class MultiScene: SKScene, UIGestureRecognizerDelegate {
     var cardBaseP1 : Card!
     var cardBaseP2 : Card!
     var multipleOfP1 : SKLabelNode!
@@ -22,6 +22,18 @@ class MultiScene: SKScene {
     var randomMultipleP1 : Int!
     var randomMultipleP2 : Int!
     
+    var gameState: GameState = .Ready
+    
+    var tapUpper: UITapGestureRecognizer!
+    var tapLower: UITapGestureRecognizer!
+    var swipeLeft: UISwipeGestureRecognizer!
+    var swipeRight: UISwipeGestureRecognizer!
+    
+    // Might work ...
+    func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWithGestureRecognizer otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return true
+    }
+    
     override func didMoveToView(view: SKView) {
         //cardBaseP1 = self.childNodeWithName("cardBaseP1") as! Card
         //cardBaseP2 = self.childNodeWithName("cardBaseP2") as! Card
@@ -31,7 +43,7 @@ class MultiScene: SKScene {
         cardBaseP1.position.y = 120
         cardBaseP1.size = cardSize
         cardBaseP1.color = UIColor.whiteColor()
-        cardBaseP1.connectNumberMulti()
+
         
         cardBaseP2 = Card()
         cardBaseP2.position.x = 160
@@ -40,7 +52,7 @@ class MultiScene: SKScene {
         cardBaseP2.xScale = -1
         cardBaseP2.yScale = -1
         cardBaseP2.color = UIColor.whiteColor()
-        cardBaseP2.connectNumberMulti()
+
         
         multipleOfP1 = self.childNodeWithName("multipleOfP1") as! SKLabelNode
         multipleOfP2 = self.childNodeWithName("multipleOfP2") as! SKLabelNode
@@ -54,40 +66,60 @@ class MultiScene: SKScene {
         
         cardStackP1 = setCardStack(true, cardBase: cardBaseP1)
         cardStackP2 = setCardStack(false, cardBase: cardBaseP2)
+        
+        swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(SingleScene.swipedRight(_:)))
+        swipeRight.direction = .Right
+        view.addGestureRecognizer(swipeRight)
+        
+        
+        swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(SingleScene.swipedLeft(_:)))
+        swipeLeft.direction = .Left
+        view.addGestureRecognizer(swipeLeft)
+        
+        tapUpper = UITapGestureRecognizer(target: self, action: #selector(MultiScene.onTapUpper(_:)))
+        //view.addGestureRecognizer(tap)
+        //tap.delegate = self
+        tapLower = UITapGestureRecognizer(target: self, action: #selector(MultiScene.onTapLower(_:)))
+
+        
+        GameViewController.topView.addGestureRecognizer(tapUpper)
+        GameViewController.bottomView.addGestureRecognizer(tapLower)
+        
     }
     
-    func addCard(number: Int, addToP1: Bool) {
-        var lastCard : Card!
-        
-        if addToP1 {
-            lastCard = cardStackP1.last
+    func onTapUpper(sender: UITapGestureRecognizer) {
+        //Player 2 side
+        removeCard("MoveUp", swipe: false, p1Action: false)
+    }
+    
+    func onTapLower(sender: UITapGestureRecognizer) {
+        //Player 1 side
+        removeCard("MoveDown", swipe: false, p1Action: true)
+    }
+
+    
+    func swipedRight(sender:UISwipeGestureRecognizer){
+
+    }
+    
+    func swipedLeft(sender:UISwipeGestureRecognizer){
+
+    }
+    
+    func removeCard(actionName: String, swipe: Bool, p1Action: Bool) {
+        var firstCard: Card!
+        if p1Action {
+            firstCard = cardStackP1.first as Card!
+            cardStackP1.removeFirst()
         }
         else {
-            lastCard = cardStackP2.last
+            firstCard = cardStackP2.first as Card!
+            cardStackP2.removeFirst()
         }
+        //checkCard(firstCard, swipe: swipe)
+        firstCard?.flip(actionName)
         
-        let newCard = lastCard.copy() as! Card
-        
-        newCard.connectNumber() //connects label
-        
-        let lastCardPosition = lastCard.position
-        
-        newCard.position = lastCardPosition + CGPoint(x: 15, y: -15) //Placing card behind
-        
-        let lastZposition = lastCard.zPosition
-        newCard.zPosition = lastZposition - 1
-        
-        newCard.number = number
-        
-        addChild(newCard) //attaches the node to the scene
-        
-        if addToP1 {
-            cardStackP1.append(newCard)
-        }
-        else {
-            cardStackP2.append(newCard)
-        }
-        
+        //moveCardStack()
     }
     
     func addCardsToScene(cards: [Card], p1: Bool) {
@@ -120,8 +152,6 @@ class MultiScene: SKScene {
         let wrongIntArray = fillWrongArray(addToP1)
         let correctIntArray = fillCorrectArray(addToP1)
         
-        cardStack.append(cardBase)
-        
         for index in 0...wrongIntArray.count-1 {
             
             //make a new card object (copying card base)
@@ -147,6 +177,10 @@ class MultiScene: SKScene {
             //append to cardStack array
             cardStack.append(newCard)
         }
+        
+        cardBase.connectNumberMulti()
+        cardBase.number = 1
+        cardStack.append(cardBase)
         
         //shuffles the 20 member card stack array of 10 multiples + 10 non-multiples
         let shuffledStack = GKRandomSource.sharedRandom().arrayByShufflingObjectsInArray(cardStack) as! [Card]
@@ -202,4 +236,16 @@ class MultiScene: SKScene {
         
         return correctArray
     }
+    
+    
+    
+    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+        for touch in touches {
+            // do something with this touch
+        }
+    }
+    
+    
+    
+    
 }
