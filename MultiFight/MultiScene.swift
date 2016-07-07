@@ -26,8 +26,12 @@ class MultiScene: SKScene, UIGestureRecognizerDelegate {
     
     var tapUpper: UITapGestureRecognizer!
     var tapLower: UITapGestureRecognizer!
-    var swipeLeft: UISwipeGestureRecognizer!
-    var swipeRight: UISwipeGestureRecognizer!
+    
+    var swipeLeftUpper: UISwipeGestureRecognizer!
+    var swipeRightUpper: UISwipeGestureRecognizer!
+    
+    var swipeLeftLower: UISwipeGestureRecognizer!
+    var swipeRightLower: UISwipeGestureRecognizer!
     
     // Might work ...
     func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWithGestureRecognizer otherGestureRecognizer: UIGestureRecognizer) -> Bool {
@@ -66,15 +70,23 @@ class MultiScene: SKScene, UIGestureRecognizerDelegate {
         
         cardStackP1 = setCardStack(true, cardBase: cardBaseP1)
         cardStackP2 = setCardStack(false, cardBase: cardBaseP2)
+        //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+        swipeRightUpper = UISwipeGestureRecognizer(target: self, action: #selector(MultiScene.swipedRightUpper(_:)))
+        swipeRightUpper.direction = .Right
         
-        swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(SingleScene.swipedRight(_:)))
-        swipeRight.direction = .Right
-        view.addGestureRecognizer(swipeRight)
+        swipeLeftUpper = UISwipeGestureRecognizer(target: self, action: #selector(MultiScene.swipedLeftUpper(_:)))
+        swipeLeftUpper.direction = .Left
         
+        //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        swipeRightLower = UISwipeGestureRecognizer(target: self, action: #selector(MultiScene.swipedRightLower(_:)))
+        swipeRightLower.direction = .Right
         
-        swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(SingleScene.swipedLeft(_:)))
-        swipeLeft.direction = .Left
-        view.addGestureRecognizer(swipeLeft)
+        swipeLeftLower = UISwipeGestureRecognizer(target: self, action: #selector(MultiScene.swipedLeftLower(_:)))
+        swipeLeftLower.direction = .Left
+        
+        //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
         
         tapUpper = UITapGestureRecognizer(target: self, action: #selector(MultiScene.onTapUpper(_:)))
         //view.addGestureRecognizer(tap)
@@ -85,7 +97,16 @@ class MultiScene: SKScene, UIGestureRecognizerDelegate {
         GameViewController.topView.addGestureRecognizer(tapUpper)
         GameViewController.bottomView.addGestureRecognizer(tapLower)
         
+        GameViewController.topView.addGestureRecognizer(swipeLeftUpper)
+        GameViewController.bottomView.addGestureRecognizer(swipeLeftLower)
+        
+        GameViewController.topView.addGestureRecognizer(swipeRightUpper)
+        GameViewController.bottomView.addGestureRecognizer(swipeRightLower)
+        
     }
+    
+    //~~~~~~~~~~~~~~~~~~~~~~~TAP/SWIPE HANDLERS~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
     
     func onTapUpper(sender: UITapGestureRecognizer) {
         //Player 2 side
@@ -98,12 +119,44 @@ class MultiScene: SKScene, UIGestureRecognizerDelegate {
     }
 
     
-    func swipedRight(sender:UISwipeGestureRecognizer){
-
+    func swipedRightUpper(sender:UISwipeGestureRecognizer){
+        //Player 2 side
+        removeCard("FlipRight", swipe: true, p1Action: false)
     }
     
-    func swipedLeft(sender:UISwipeGestureRecognizer){
+    func swipedLeftUpper(sender:UISwipeGestureRecognizer){
+        //Player 2 side
+        removeCard("FlipLeft", swipe: true, p1Action: false)
+    }
+    
+    func swipedRightLower(sender:UISwipeGestureRecognizer){
+        //Player 1 side
+        removeCard("FlipRight", swipe: true, p1Action: true)
+    }
+    
+    func swipedLeftLower(sender:UISwipeGestureRecognizer){
+        //Player 1 side
+        removeCard("FlipLeft", swipe: true, p1Action: true)
+    }
+    
+    //~~~~~~~~~~~~~~~~~~~~~~~TAP/SWIPE HANDLERS~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+    
+    func moveCardStack(actionP1: Bool) {
+        if actionP1 {
+            for node:Card in cardStackP1 {
+                node.runAction(SKAction.moveBy(CGVector(dx: -5, dy: 5), duration: 0.10))
+                
+                node.zPosition += 1
+            }
+        }
+        else {
+            for node:Card in cardStackP2 {
+                node.runAction(SKAction.moveBy(CGVector(dx: 5, dy: -5), duration: 0.10))
+                
+                node.zPosition += 1
+            }
+        }
     }
     
     func removeCard(actionName: String, swipe: Bool, p1Action: Bool) {
@@ -116,10 +169,12 @@ class MultiScene: SKScene, UIGestureRecognizerDelegate {
             firstCard = cardStackP2.first as Card!
             cardStackP2.removeFirst()
         }
+        
         //checkCard(firstCard, swipe: swipe)
+        firstCard?.zPosition += 1
         firstCard?.flip(actionName)
         
-        //moveCardStack()
+        moveCardStack(p1Action)
     }
     
     func addCardsToScene(cards: [Card], p1: Bool) {

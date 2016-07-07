@@ -112,10 +112,6 @@ class SingleScene: SKScene {
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
        /* Called when a touch begins */
         gameState = .Playing
-        
-        /*for touch in touches {
-
-        }*/
     }
     
     func onTap(sender: UITapGestureRecognizer) {
