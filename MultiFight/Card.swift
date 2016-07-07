@@ -31,6 +31,15 @@ class Card: SKSpriteNode  {
         cardNumber = self.childNodeWithName("cardNumber") as! SKLabelNode
     }
     
+    func connectNumberMulti() {
+        cardNumber = SKLabelNode(fontNamed: "Helvetica")
+        cardNumber.fontColor = UIColor.blackColor()
+        cardNumber.position.x = 0
+        cardNumber.position.y = -20
+        cardNumber.fontSize = 72
+        addChild(cardNumber)
+    }
+    
     func flip(actionName: String) {
         let flip = SKAction(named: actionName)!
         

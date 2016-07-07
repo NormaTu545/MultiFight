@@ -29,6 +29,7 @@ class SingleScene: SKScene {
     var highScoreLabel: SKLabelNode!
     var endScoreLabel: SKLabelNode!
     var playButton: MSButtonNode!
+    var homeButton: MSButtonNode!
     
     var tap: UITapGestureRecognizer!
     var swipeLeft: UISwipeGestureRecognizer!
@@ -67,7 +68,8 @@ class SingleScene: SKScene {
         highScoreLabel = self.childNodeWithName("//highScoreLabel") as! SKLabelNode
         endScoreLabel = self.childNodeWithName("//endScoreLabel") as! SKLabelNode
         playButton = self.childNodeWithName("//playButton") as! MSButtonNode
-        
+        homeButton = self.childNodeWithName("//homeButton") as! MSButtonNode
+
         multipleOf.text = "Multiple of: \(randomMultiple)"
         
         swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(SingleScene.swipedRight(_:)))
@@ -89,12 +91,19 @@ class SingleScene: SKScene {
         addRandomCards(2)
         
         playButton.selectedHandler = {
-            //let hideEndScreen = SKAction(named: "pullScreen")!
-            //self.endScreen.runAction(hideEndScreen)
             
             //Resets the game
             let skView = self.view as SKView!
             let scene = SingleScene(fileNamed: "SingleScene") as SingleScene!
+            scene.scaleMode = .AspectFill
+            skView.presentScene(scene)
+        }
+        
+        homeButton.selectedHandler = {
+            
+            //Resets the game
+            let skView = self.view as SKView!
+            let scene = MainMenu(fileNamed: "MainMenu") as MainMenu!
             scene.scaleMode = .AspectFill
             skView.presentScene(scene)
         }

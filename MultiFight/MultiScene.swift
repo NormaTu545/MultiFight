@@ -23,8 +23,24 @@ class MultiScene: SKScene {
     var randomMultipleP2 : Int!
     
     override func didMoveToView(view: SKView) {
-        cardBaseP1 = self.childNodeWithName("cardBaseP1") as! Card
-        cardBaseP2 = self.childNodeWithName("cardBaseP2") as! Card
+        //cardBaseP1 = self.childNodeWithName("cardBaseP1") as! Card
+        //cardBaseP2 = self.childNodeWithName("cardBaseP2") as! Card
+        let cardSize = CGSize(width: 140, height: 140)
+        cardBaseP1 = Card()
+        cardBaseP1.position.x = 160
+        cardBaseP1.position.y = 120
+        cardBaseP1.size = cardSize
+        cardBaseP1.color = UIColor.whiteColor()
+        cardBaseP1.connectNumberMulti()
+        
+        cardBaseP2 = Card()
+        cardBaseP2.position.x = 160
+        cardBaseP2.position.y = 450
+        cardBaseP2.size = cardSize
+        cardBaseP2.xScale = -1
+        cardBaseP2.yScale = -1
+        cardBaseP2.color = UIColor.whiteColor()
+        cardBaseP2.connectNumberMulti()
         
         multipleOfP1 = self.childNodeWithName("multipleOfP1") as! SKLabelNode
         multipleOfP2 = self.childNodeWithName("multipleOfP2") as! SKLabelNode
@@ -36,10 +52,8 @@ class MultiScene: SKScene {
         multipleOfP1.text = "Multiple of: \(randomMultipleP1)"
         multipleOfP2.text = "Multiple of: \(randomMultipleP2)"
         
-        //cardStackP1.append(cardBaseP1)
-        //cardStackP2.append(cardBaseP2)
-        
-
+        cardStackP1 = setCardStack(true, cardBase: cardBaseP1)
+        cardStackP2 = setCardStack(false, cardBase: cardBaseP2)
     }
     
     func addCard(number: Int, addToP1: Bool) {
@@ -76,15 +90,70 @@ class MultiScene: SKScene {
         
     }
     
-    func setCardStack(addToP1: Bool) -> [Card] {
+    func addCardsToScene(cards: [Card], p1: Bool) {
+        let firstCard = cards[0]
+        
+        addChild(firstCard)
+        
+        for index in 1..<cards.count {
+            let lastCard = cards[index - 1]
+            let newCard = cards[index]
+            let lastPosition = lastCard.position
+            let lastZPosition = lastCard.zPosition
+            
+            newCard.zPosition = lastZPosition - 1
+            if p1 {
+                newCard.position = lastPosition + CGPoint(x: 5, y: -5)
+            }
+            else {
+                newCard.position = lastPosition + CGPoint(x: -5, y: 5)
+            }
+            addChild(newCard)
+        }
+        
+    }
+    
+    //This function returns a full & shuffled 20 card stack array 
+    func setCardStack(addToP1: Bool, cardBase: Card) -> [Card] {
+
         var cardStack: [Card] = []
         let wrongIntArray = fillWrongArray(addToP1)
         let correctIntArray = fillCorrectArray(addToP1)
         
-        //LEFT OFF HERE~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        cardStack.append(cardBase)
         
+        for index in 0...wrongIntArray.count-1 {
+            
+            //make a new card object (copying card base)
+            let newCard = cardBase.copy() as! Card
+            newCard.connectNumberMulti() //connects label to card
+            
+            //that card object.number = wrongIntArray[index]
+            newCard.number = wrongIntArray[index]
+            
+            //append to cardStack array
+            cardStack.append(newCard)
+        }
         
-        return cardStack
+        for index in 0...correctIntArray.count-1 {
+            
+            //make a new card object (copying card base)
+            let newCard = cardBase.copy() as! Card
+            newCard.connectNumberMulti() //connects label to card
+            
+            //that card object.number = Array[index]
+            newCard.number = correctIntArray[index]
+            
+            //append to cardStack array
+            cardStack.append(newCard)
+        }
+        
+        //shuffles the 20 member card stack array of 10 multiples + 10 non-multiples
+        let shuffledStack = GKRandomSource.sharedRandom().arrayByShufflingObjectsInArray(cardStack) as! [Card]
+        
+        addCardsToScene(shuffledStack, p1: addToP1)
+
+        return shuffledStack
     }
     
     func fillWrongArray(addToP1: Bool) -> [Int] {
