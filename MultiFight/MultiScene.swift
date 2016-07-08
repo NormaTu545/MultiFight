@@ -12,17 +12,40 @@ import GameplayKit
 class MultiScene: SKScene, UIGestureRecognizerDelegate {
     var cardBaseP1 : Card!
     var cardBaseP2 : Card!
+    
     var multipleOfP1 : SKLabelNode!
     var multipleOfP2 : SKLabelNode!
     var doneLabelP1: SKLabelNode!
     var doneLabelP2: SKLabelNode!
+    var timerP1: SKSpriteNode!
+    var timerP2: SKSpriteNode!
+    var timerHolder1: SKSpriteNode!
+    var timerHolder2: SKSpriteNode!
+    var endScreen: SKSpriteNode!
+    var winnerLabel: SKLabelNode!
+    var scoreLabelP1: SKLabelNode!
+    var scoreLabelP2: SKLabelNode!
+    var playButton: MSButtonNode!
+    var homeButton: MSButtonNode!
+    
+    var timer: CGFloat = 1 {
+        didSet {
+            if timer < 0 {
+                timer = 0
+            }
+            
+            timerP1.xScale = timer
+            timerP2.xScale = -timer
+        }
+    }
+    
     var cardStackP1 : [Card] = []
     var cardStackP2 : [Card] = []
+
+    var randomMultiple : Int!
     
-    var correctArray : [Card] = []
-    
-    var randomMultipleP1 : Int!
-    var randomMultipleP2 : Int!
+    var scoreP1: Int = 0
+    var scoreP2: Int = 0
     
     var gameState: GameState = .Ready
     
@@ -47,7 +70,7 @@ class MultiScene: SKScene, UIGestureRecognizerDelegate {
         cardBaseP1.position.y = 120
         cardBaseP1.size = cardSize
         cardBaseP1.color = UIColor.whiteColor()
-        
+        cardBaseP1.name = "BaseP1"
         
         cardBaseP2 = Card()
         cardBaseP2.position.x = 160
@@ -56,23 +79,39 @@ class MultiScene: SKScene, UIGestureRecognizerDelegate {
         cardBaseP2.xScale = -1
         cardBaseP2.yScale = -1
         cardBaseP2.color = UIColor.whiteColor()
-        
-        
+        cardBaseP2.name = "BaseP2"
+
         multipleOfP1 = self.childNodeWithName("multipleOfP1") as! SKLabelNode
         multipleOfP2 = self.childNodeWithName("multipleOfP2") as! SKLabelNode
-        
         doneLabelP1 = self.childNodeWithName("doneLabelP1") as! SKLabelNode
         doneLabelP2 = self.childNodeWithName("doneLabelP2") as! SKLabelNode
+        timerP1 = self.childNodeWithName("timerP1") as! SKSpriteNode
+        timerP2 = self.childNodeWithName("timerP2") as! SKSpriteNode
+        timerHolder1 = self.childNodeWithName("timerHolder1") as! SKSpriteNode
+        timerHolder2 = self.childNodeWithName("timerHolder2") as! SKSpriteNode
+        endScreen = self.childNodeWithName("endScreen") as! SKSpriteNode
+        winnerLabel = self.childNodeWithName("//winnerLabel") as! SKLabelNode
+        scoreLabelP1 = self.childNodeWithName("//scoreLabelP1") as! SKLabelNode
+        scoreLabelP2 = self.childNodeWithName("//scoreLabelP2") as! SKLabelNode
+        playButton = self.childNodeWithName("//playButton") as! MSButtonNode
+        homeButton = self.childNodeWithName("//homeButton") as! MSButtonNode
         
-        //Both players get a random starting multiple each
-        randomMultipleP1 = Int(arc4random_uniform(8) + 2)
-        randomMultipleP2 = Int(arc4random_uniform(8) + 2)
+        doneLabelP1.hidden = true
+        doneLabelP2.hidden = true
+        timerP1.hidden = true
+        timerP2.hidden = true
+        timerHolder1.hidden = true
+        timerHolder2.hidden = true
         
-        multipleOfP1.text = "Multiple of: \(randomMultipleP1)"
-        multipleOfP2.text = "Multiple of: \(randomMultipleP2)"
+        //Both players get a random starting multiple
+        randomMultiple = Int(arc4random_uniform(8) + 2)
         
-        cardStackP1 = setCardStack(true, cardBase: cardBaseP1)
-        cardStackP2 = setCardStack(false, cardBase: cardBaseP2)
+        multipleOfP1.text = "Multiple of: \(randomMultiple)"
+        multipleOfP2.text = "Multiple of: \(randomMultiple)"
+        
+        cardStackP1 = setCardStack(cardBaseP1)
+        cardStackP2 = generateSecondCardStack(cardBaseP2)
+        
         //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         
         swipeRightUpper = UISwipeGestureRecognizer(target: self, action: #selector(MultiScene.swipedRightUpper(_:)))
@@ -92,8 +131,6 @@ class MultiScene: SKScene, UIGestureRecognizerDelegate {
         
         
         tapUpper = UITapGestureRecognizer(target: self, action: #selector(MultiScene.onTapUpper(_:)))
-        //view.addGestureRecognizer(tap)
-        //tap.delegate = self
         tapLower = UITapGestureRecognizer(target: self, action: #selector(MultiScene.onTapLower(_:)))
         
         
@@ -106,6 +143,41 @@ class MultiScene: SKScene, UIGestureRecognizerDelegate {
         GameViewController.topView.addGestureRecognizer(swipeRightUpper)
         GameViewController.bottomView.addGestureRecognizer(swipeRightLower)
         
+        //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        
+        playButton.selectedHandler = {
+            if let scene = MultiScene(fileNamed:"MultiScene") {
+                // Configure the view.
+                let skView = self.view!
+                skView.showsFPS = true
+                skView.showsNodeCount = true
+                
+                /* Sprite Kit applies additional optimizations to improve rendering performance */
+                skView.ignoresSiblingOrder = true
+                
+                /* Set the scale mode to scale to fit the window */
+                scene.scaleMode = .AspectFill
+                
+                skView.presentScene(scene)
+            }
+        }
+        
+        homeButton.selectedHandler = {
+            if let scene = MainMenu(fileNamed:"MainMenu") {
+                // Configure the view.
+                let skView = self.view!
+                skView.showsFPS = true
+                skView.showsNodeCount = true
+                
+                /* Sprite Kit applies additional optimizations to improve rendering performance */
+                skView.ignoresSiblingOrder = true
+                
+                /* Set the scale mode to scale to fit the window */
+                scene.scaleMode = .AspectFill
+                
+                skView.presentScene(scene)
+            }
+        }
     }
     
     //~~~~~~~~~~~~~~~~~~~~~~~TAP/SWIPE HANDLERS~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -174,16 +246,48 @@ class MultiScene: SKScene, UIGestureRecognizerDelegate {
         else {
             firstCard = cardStackP2.first as Card!
             cardStackP2.removeFirst()
-            if cardStackP1.isEmpty {
+            if cardStackP2.isEmpty {
                 endGame(false)
             }
         }
         
-        //checkCard(firstCard, swipe: swipe)
+        checkCard(firstCard, swipe: swipe, p1Action: p1Action)
         firstCard?.zPosition += 1
         firstCard?.flip(actionName)
         
         moveCardStack(p1Action)
+    }
+    
+    func checkCard(card: Card, swipe: Bool, p1Action: Bool) {
+        if swipe {
+            //Gives point if you swipe a non-multiple
+            if card.number % randomMultiple != 0 {
+                if p1Action {
+                    scoreP1 += 1
+                }
+                else {
+                    scoreP2 += 1
+                }
+                card.color = UIColor.greenColor()
+            }
+            else {
+                card.color = UIColor.redColor()
+            }
+        }
+        else {
+            if card.number % randomMultiple == 0 {
+                if p1Action {
+                    scoreP1 += 1
+                }
+                else {
+                    scoreP2 += 1
+                }
+                card.color = UIColor.greenColor()
+            }
+            else {
+                card.color = UIColor.redColor()
+            }
+        }
     }
     
     func addCardsToScene(cards: [Card], p1: Bool) {
@@ -204,17 +308,18 @@ class MultiScene: SKScene, UIGestureRecognizerDelegate {
             else {
                 newCard.position = lastPosition + CGPoint(x: -5, y: 5)
             }
+            
             addChild(newCard)
         }
         
     }
     
     //This function returns a full & shuffled 20 card stack array
-    func setCardStack(addToP1: Bool, cardBase: Card) -> [Card] {
+    func setCardStack(cardBase: Card) -> [Card]{
         
         var cardStack: [Card] = []
-        let wrongIntArray = fillWrongArray(addToP1)
-        let correctIntArray = fillCorrectArray(addToP1)
+        let wrongIntArray = fillWrongArray()
+        let correctIntArray = fillCorrectArray()
         
         for index in 0...wrongIntArray.count-1 {
             
@@ -248,54 +353,61 @@ class MultiScene: SKScene, UIGestureRecognizerDelegate {
         
         //shuffles the 20 member card stack array of 10 multiples + 10 non-multiples
         let shuffledStack = GKRandomSource.sharedRandom().arrayByShufflingObjectsInArray(cardStack) as! [Card]
-        
-        addCardsToScene(shuffledStack, p1: addToP1)
+        addCardsToScene(shuffledStack, p1: true)
         
         return shuffledStack
     }
     
-    func fillWrongArray(addToP1: Bool) -> [Int] {
+    func generateSecondCardStack(cardBase: Card) -> [Card] {
+        var newCardStack: [Card] = []
+        
+        for card: Card in cardStackP1 {
+            if !(card.number == 1) {
+                let newCard = cardBase.copy() as! Card
+                newCard.connectNumberMulti()
+                
+                newCard.number = card.number
+                
+                newCardStack.append(newCard)
+            }
+        }
+        
+        cardBase.removeFromParent()
+        cardBase.connectNumberMulti()
+        cardBase.number = 1
+        newCardStack.append(cardBase)
+        
+        let shuffledStack = GKRandomSource.sharedRandom().arrayByShufflingObjectsInArray(newCardStack) as! [Card]
+        
+        addCardsToScene(shuffledStack, p1: false)
+
+        return shuffledStack
+    }
+    
+    func fillWrongArray() -> [Int] {
         var wrongArray : [Int] = []
         
         while wrongArray.count < 9 {
             var randomNumber: Int!
-            if addToP1 {
-                let topNumber = UInt32(randomMultipleP1 * 10)
-                randomNumber = Int(arc4random_uniform(topNumber - 1) + 1)
-                
-                if randomNumber % randomMultipleP1 != 0 {
-                    wrongArray.append(randomNumber)
-                }
-            }
-            else {
-                let topNumber = UInt32(randomMultipleP2 * 10)
-                randomNumber = Int(arc4random_uniform(topNumber - 1) + 1)
-                
-                if randomNumber % randomMultipleP2 != 0 {
-                    wrongArray.append(randomNumber)
-                }
+            let topNumber = UInt32(randomMultiple * 10)
+            randomNumber = Int(arc4random_uniform(topNumber - 1) + 1)
+            
+            if randomNumber % randomMultiple != 0 {
+                wrongArray.append(randomNumber)
             }
         }
         
         return wrongArray
     }
     
-    func fillCorrectArray(addToP1: Bool) -> [Int] {
+    func fillCorrectArray() -> [Int] {
         var correctArray : [Int] = []
         
-        var multiple : Int!
-        if addToP1 {
-            multiple = randomMultipleP1
-        }
-        else {
-            multiple = randomMultipleP2
-        }
-        
-        var currentMultiple: Int = multiple
+        var currentMultiple: Int = randomMultiple
         
         for _ in 0...9 {
             correctArray.append(currentMultiple)
-            currentMultiple += multiple
+            currentMultiple += randomMultiple
         }
         
         return correctArray
@@ -310,11 +422,13 @@ class MultiScene: SKScene, UIGestureRecognizerDelegate {
             // player 2 not done yet
             if !cardStackP2.isEmpty {
                 //Start timer for p2
-                //Game over when timer is out for p2
+                gameState = .PlayerFinished
+                timerP2.hidden = false
+                timerHolder2.hidden = false
             }
                 // player 2 done at the same time as player 1
             else {
-                gameState = .GameOver
+                gameOver()
             }
         }
             // player 2 finished first
@@ -325,16 +439,37 @@ class MultiScene: SKScene, UIGestureRecognizerDelegate {
             // player 1 not done yet
             if !cardStackP1.isEmpty {
                 //Start timer for p1
-                //Game Over when timer is out for p1
+                gameState = .PlayerFinished
+                timerP1.hidden = false
+                timerHolder1.hidden = false
             }
                 // player 1 done at same time as player 2
             else {
-                gameState = .GameOver
+                gameOver()
             }
         }
+    }
+    
+    func gameOver() {
+        gameState = .GameOver
+        removeP1Functionality()
+        removeP2Functionality()
         
-        // if gameState == .GameOver, show end screen
-        // call gameOver function to do that
+        let showEndScreen = SKAction(named: "dropScreen")!
+        endScreen.runAction(showEndScreen)
+        
+        if scoreP1 > scoreP2 {
+            winnerLabel.text = "Blue Wins!"
+        }
+        else if scoreP1 < scoreP2 {
+            winnerLabel.text = "Green Wins!"
+        }
+        else {
+            winnerLabel.text = "Tie!"
+        }
+        
+        scoreLabelP1.text = "Blue's Score: \(scoreP1)"
+        scoreLabelP2.text = "Green's Score: \(scoreP2)"
     }
     
     func removeP1Functionality() {
@@ -347,5 +482,15 @@ class MultiScene: SKScene, UIGestureRecognizerDelegate {
         GameViewController.bottomView.removeGestureRecognizer(tapUpper)
         GameViewController.bottomView.removeGestureRecognizer(swipeLeftUpper)
         GameViewController.bottomView.removeGestureRecognizer(swipeRightUpper)
+    }
+    
+    override func update(currentTime: NSTimeInterval) {
+        if gameState == .PlayerFinished {
+            timer -= 0.01
+        }
+        
+        if timer <= 0 {
+            gameOver()
+        }
     }
 }

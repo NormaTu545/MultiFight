@@ -10,17 +10,13 @@ import Foundation
 import SpriteKit
 
 enum GameState {
-    case Ready, Playing, GameOver
+    case Ready, Playing, GameOver, PlayerFinished
 }
 
 class MainMenu: SKScene {
     
     var button1 : MSButtonNode!
     var button2 : MSButtonNode!
-    
-    
-    
-    
     
     override func didMoveToView(view: SKView) {
         button1 = self.childNodeWithName("button1") as! MSButtonNode
