@@ -35,6 +35,8 @@
 		AD5347541D2C602900FBF7B1 /* MultiScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = AD5347531D2C602900FBF7B1 /* MultiScene.sks */; };
 		AD5347561D2C641500FBF7B1 /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD5347551D2C641500FBF7B1 /* Card.swift */; };
 		AD53477A1D2D7ED900FBF7B1 /* AnimationActions.sks in Resources */ = {isa = PBXBuildFile; fileRef = AD5347791D2D7ED900FBF7B1 /* AnimationActions.sks */; };
+		AD8DD2871D302C4500A37369 /* ding.wav in Resources */ = {isa = PBXBuildFile; fileRef = AD8DD2861D302C4500A37369 /* ding.wav */; };
+		AD8DD2891D302C5500A37369 /* wrong.wav in Resources */ = {isa = PBXBuildFile; fileRef = AD8DD2881D302C5500A37369 /* wrong.wav */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -68,6 +70,8 @@
 		AD5347531D2C602900FBF7B1 /* MultiScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = MultiScene.sks; sourceTree = "<group>"; };
 		AD5347551D2C641500FBF7B1 /* Card.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
 		AD5347791D2D7ED900FBF7B1 /* AnimationActions.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = AnimationActions.sks; sourceTree = "<group>"; };
+		AD8DD2861D302C4500A37369 /* ding.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = ding.wav; sourceTree = "<group>"; };
+		AD8DD2881D302C5500A37369 /* wrong.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = wrong.wav; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -112,6 +116,7 @@
 				AD53472D1D2C573F00FBF7B1 /* MainMenu.swift */,
 				AD53471D1D2C56AB00FBF7B1 /* GameViewController.swift */,
 				AD53471F1D2C56AB00FBF7B1 /* Main.storyboard */,
+				AD8DD2851D302C2800A37369 /* SFX */,
 				AD5347221D2C56AB00FBF7B1 /* Assets.xcassets */,
 				AD5347311D2C581100FBF7B1 /* Utils */,
 				AD5347241D2C56AB00FBF7B1 /* LaunchScreen.storyboard */,
@@ -147,6 +152,15 @@
 				AD5347401D2C581100FBF7B1 /* Vector3.swift */,
 			);
 			path = SKTUtils;
+			sourceTree = "<group>";
+		};
+		AD8DD2851D302C2800A37369 /* SFX */ = {
+			isa = PBXGroup;
+			children = (
+				AD8DD2861D302C4500A37369 /* ding.wav */,
+				AD8DD2881D302C5500A37369 /* wrong.wav */,
+			);
+			name = SFX;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -214,6 +228,8 @@
 				AD5347231D2C56AB00FBF7B1 /* Assets.xcassets in Resources */,
 				AD53477A1D2D7ED900FBF7B1 /* AnimationActions.sks in Resources */,
 				AD5347501D2C5AEA00FBF7B1 /* Copperplate.ttc in Resources */,
+				AD8DD2891D302C5500A37369 /* wrong.wav in Resources */,
+				AD8DD2871D302C4500A37369 /* ding.wav in Resources */,
 				AD5347301D2C57CE00FBF7B1 /* MainMenu.sks in Resources */,
 				AD5347211D2C56AB00FBF7B1 /* Main.storyboard in Resources */,
 			);

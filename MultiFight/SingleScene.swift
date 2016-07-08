@@ -158,14 +158,18 @@ class SingleScene: SKScene {
                 //add time
                 health += 0.0025
                 card.color = UIColor.greenColor()
+                
                 //CORRECT DING SOUND EFFECT HERE
+                playCorrectSound()
             }
             //removes time if you swipe a multiple
             else {
                 //decrease time
                 health -= 0.1
                 card.color = UIColor.redColor()
-
+                
+                //Wrong sound
+                playWrongSound()
             }
         }
         else {
@@ -175,12 +179,16 @@ class SingleScene: SKScene {
                 //add time
                 health += 0.1
                 card.color = UIColor.greenColor()
+                
+                playCorrectSound()
             }
             //removes time if you tap a non-multiple
             else {
                 //decrease time
                 health -= 0.1
                 card.color = UIColor.redColor()
+                
+                playWrongSound()
             }
         }
         checkScore()
@@ -284,4 +292,18 @@ class SingleScene: SKScene {
             gameOver()
         }
     }
+    
+    func playCorrectSound () {
+        let dingSFX = SKAction.playSoundFileNamed("ding", waitForCompletion: false)
+        
+        self.runAction(dingSFX)
+    }
+    
+    func playWrongSound () {
+        let wrongSFX = SKAction.playSoundFileNamed("wrong", waitForCompletion: false)
+        
+        self.runAction(wrongSFX)
+    }
+    
+    
 }
