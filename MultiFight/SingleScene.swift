@@ -19,7 +19,6 @@ enum Difficulty {
 
 class SingleScene: SKScene {
     var cardBase : Card!
-    var multipleOf : SKLabelNode!
     var cardStack: [Card] = []
     var scoreLabel: SKLabelNode!
     var gameState: GameState = .Ready
@@ -30,6 +29,9 @@ class SingleScene: SKScene {
     var endScoreLabel: SKLabelNode!
     var playButton: MSButtonNode!
     var homeButton: MSButtonNode!
+    
+    var multipleLabel: SKLabelNode!
+    var multipleLabelOutline: SKLabelNode!
     
     var tap: UITapGestureRecognizer!
     var swipeLeft: UISwipeGestureRecognizer!
@@ -63,7 +65,8 @@ class SingleScene: SKScene {
     override func didMoveToView(view: SKView) {
         /* Setup your scene here */
         cardBase = self.childNodeWithName("cardBase") as! Card
-        multipleOf = self.childNodeWithName("multipleOf") as! SKLabelNode
+        multipleLabel = self.childNodeWithName("multipleLabel") as! SKLabelNode
+        multipleLabelOutline = self.childNodeWithName("multipleLabelOutline") as! SKLabelNode
         scoreLabel = self.childNodeWithName("scoreLabel") as! SKLabelNode
         healthBar = self.childNodeWithName("healthBar") as! SKSpriteNode
         endScreen = self.childNodeWithName("endScreen") as! SKSpriteNode
@@ -72,7 +75,8 @@ class SingleScene: SKScene {
         playButton = self.childNodeWithName("//playButton") as! MSButtonNode
         homeButton = self.childNodeWithName("//homeButton") as! MSButtonNode
 
-        multipleOf.text = "Multiple of: \(randomMultiple)"
+        multipleLabel.text = String(randomMultiple)
+        multipleLabelOutline.text = String(randomMultiple)
         
         swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(SingleScene.swipedRight(_:)))
         swipeRight.direction = .Right

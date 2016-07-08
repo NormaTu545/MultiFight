@@ -13,8 +13,11 @@ class MultiScene: SKScene, UIGestureRecognizerDelegate {
     var cardBaseP1 : Card!
     var cardBaseP2 : Card!
     
-    var multipleOfP1 : SKLabelNode!
-    var multipleOfP2 : SKLabelNode!
+    var multipleLabelP1: SKLabelNode!
+    var multipleLabelOutlineP1: SKLabelNode!
+    var multipleLabelP2: SKLabelNode!
+    var multipleLabelOutlineP2: SKLabelNode!
+    
     var doneLabelP1: SKLabelNode!
     var doneLabelP2: SKLabelNode!
     var timerP1: SKSpriteNode!
@@ -78,8 +81,10 @@ class MultiScene: SKScene, UIGestureRecognizerDelegate {
         cardBaseP2.yScale = -1
         cardBaseP2.name = "BaseP2"
 
-        multipleOfP1 = self.childNodeWithName("multipleOfP1") as! SKLabelNode
-        multipleOfP2 = self.childNodeWithName("multipleOfP2") as! SKLabelNode
+        multipleLabelP1 = self.childNodeWithName("multipleLabelP1") as! SKLabelNode
+        multipleLabelOutlineP1 = self.childNodeWithName("multipleLabelOutlineP1") as! SKLabelNode
+        multipleLabelP2 = self.childNodeWithName("multipleLabelP2") as! SKLabelNode
+        multipleLabelOutlineP2 = self.childNodeWithName("multipleLabelOutlineP2") as! SKLabelNode
         doneLabelP1 = self.childNodeWithName("doneLabelP1") as! SKLabelNode
         doneLabelP2 = self.childNodeWithName("doneLabelP2") as! SKLabelNode
         timerP1 = self.childNodeWithName("timerP1") as! SKSpriteNode
@@ -103,8 +108,10 @@ class MultiScene: SKScene, UIGestureRecognizerDelegate {
         //Both players get a random starting multiple
         randomMultiple = Int(arc4random_uniform(8) + 2)
         
-        multipleOfP1.text = "Multiple of: \(randomMultiple)"
-        multipleOfP2.text = "Multiple of: \(randomMultiple)"
+        multipleLabelP1.text = String(randomMultiple)
+        multipleLabelOutlineP1.text = String(randomMultiple)
+        multipleLabelP2.text = String(randomMultiple)
+        multipleLabelOutlineP2.text = String(randomMultiple)
         
         cardStackP1 = setCardStack(cardBaseP1)
         cardStackP2 = generateSecondCardStack(cardBaseP2)
