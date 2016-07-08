@@ -27,6 +27,7 @@ class MultiScene: SKScene, UIGestureRecognizerDelegate {
     var scoreLabelP2: SKLabelNode!
     var playButton: MSButtonNode!
     var homeButton: MSButtonNode!
+    var backgroundMusic: SKAudioNode!
     
     var timer: CGFloat = 1 {
         didSet {
@@ -107,6 +108,11 @@ class MultiScene: SKScene, UIGestureRecognizerDelegate {
         
         cardStackP1 = setCardStack(cardBaseP1)
         cardStackP2 = generateSecondCardStack(cardBaseP2)
+        
+        if let musicURL = NSBundle.mainBundle().URLForResource("gameplay", withExtension: "mp3") {
+            backgroundMusic = SKAudioNode(URL: musicURL)
+            addChild(backgroundMusic)
+        }
         
         //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         
@@ -270,9 +276,11 @@ class MultiScene: SKScene, UIGestureRecognizerDelegate {
                     scoreP2 += 1
                 }
                 card.color = UIColor.greenColor()
+                playCorrectSound()
             }
             else {
                 card.color = UIColor.redColor()
+                playWrongSound()
             }
         }
         else {
@@ -284,9 +292,11 @@ class MultiScene: SKScene, UIGestureRecognizerDelegate {
                     scoreP2 += 1
                 }
                 card.color = UIColor.greenColor()
+                playCorrectSound()
             }
             else {
                 card.color = UIColor.redColor()
+                playWrongSound()
             }
         }
     }
@@ -495,5 +505,17 @@ class MultiScene: SKScene, UIGestureRecognizerDelegate {
         if timer <= 0 {
             gameOver()
         }
+    }
+    
+    func playCorrectSound () {
+        let dingSFX = SKAction.playSoundFileNamed("ding", waitForCompletion: false)
+        
+        self.runAction(dingSFX)
+    }
+    
+    func playWrongSound () {
+        let wrongSFX = SKAction.playSoundFileNamed("wrong", waitForCompletion: false)
+        
+        self.runAction(wrongSFX)
     }
 }

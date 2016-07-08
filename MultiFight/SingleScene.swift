@@ -35,6 +35,8 @@ class SingleScene: SKScene {
     var swipeLeft: UISwipeGestureRecognizer!
     var swipeRight: UISwipeGestureRecognizer!
     
+    var backgroundMusic: SKAudioNode!
+    
     var score = 0 {
         didSet {
             scoreLabel.text = "Score: \(score)"
@@ -107,6 +109,11 @@ class SingleScene: SKScene {
             scene.scaleMode = .AspectFill
             skView.presentScene(scene)
         }
+        
+        if let musicURL = NSBundle.mainBundle().URLForResource("gameplay", withExtension: "mp3") {
+            backgroundMusic = SKAudioNode(URL: musicURL)
+            addChild(backgroundMusic)
+        }
     }
     
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
@@ -156,7 +163,7 @@ class SingleScene: SKScene {
             if card.number % randomMultiple != 0 {
                 score += 1
                 //add time
-                health += 0.0025
+                health += 0.005
                 card.color = UIColor.greenColor()
                 
                 //CORRECT DING SOUND EFFECT HERE
@@ -285,7 +292,7 @@ class SingleScene: SKScene {
         }
         
         //Naturally decreases time
-        health -= 0.001
+        health -= 0.0015 
         
         if health <= 0 {
             //end game

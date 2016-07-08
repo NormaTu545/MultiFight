@@ -37,6 +37,8 @@
 		AD53477A1D2D7ED900FBF7B1 /* AnimationActions.sks in Resources */ = {isa = PBXBuildFile; fileRef = AD5347791D2D7ED900FBF7B1 /* AnimationActions.sks */; };
 		AD8DD2871D302C4500A37369 /* ding.wav in Resources */ = {isa = PBXBuildFile; fileRef = AD8DD2861D302C4500A37369 /* ding.wav */; };
 		AD8DD2891D302C5500A37369 /* wrong.wav in Resources */ = {isa = PBXBuildFile; fileRef = AD8DD2881D302C5500A37369 /* wrong.wav */; };
+		AD8DD28C1D303FC300A37369 /* gameplay.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = AD8DD28A1D303FC300A37369 /* gameplay.mp3 */; };
+		AD8DD28D1D303FC300A37369 /* mainMenu.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = AD8DD28B1D303FC300A37369 /* mainMenu.mp3 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -72,6 +74,8 @@
 		AD5347791D2D7ED900FBF7B1 /* AnimationActions.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = AnimationActions.sks; sourceTree = "<group>"; };
 		AD8DD2861D302C4500A37369 /* ding.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = ding.wav; sourceTree = "<group>"; };
 		AD8DD2881D302C5500A37369 /* wrong.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = wrong.wav; sourceTree = "<group>"; };
+		AD8DD28A1D303FC300A37369 /* gameplay.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = gameplay.mp3; sourceTree = "<group>"; };
+		AD8DD28B1D303FC300A37369 /* mainMenu.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = mainMenu.mp3; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -159,6 +163,8 @@
 			children = (
 				AD8DD2861D302C4500A37369 /* ding.wav */,
 				AD8DD2881D302C5500A37369 /* wrong.wav */,
+				AD8DD28A1D303FC300A37369 /* gameplay.mp3 */,
+				AD8DD28B1D303FC300A37369 /* mainMenu.mp3 */,
 			);
 			name = SFX;
 			sourceTree = "<group>";
@@ -230,7 +236,9 @@
 				AD5347501D2C5AEA00FBF7B1 /* Copperplate.ttc in Resources */,
 				AD8DD2891D302C5500A37369 /* wrong.wav in Resources */,
 				AD8DD2871D302C4500A37369 /* ding.wav in Resources */,
+				AD8DD28D1D303FC300A37369 /* mainMenu.mp3 in Resources */,
 				AD5347301D2C57CE00FBF7B1 /* MainMenu.sks in Resources */,
+				AD8DD28C1D303FC300A37369 /* gameplay.mp3 in Resources */,
 				AD5347211D2C56AB00FBF7B1 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -384,6 +392,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.normatu.MultiFight;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -399,6 +408,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.normatu.MultiFight;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

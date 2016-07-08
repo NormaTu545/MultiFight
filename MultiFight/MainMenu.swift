@@ -25,10 +25,17 @@ class MainMenu: SKScene {
     
     var mode: Mode = .None
     
+    var backgroundMusic: SKAudioNode!
+    
     override func didMoveToView(view: SKView) {
         button1 = self.childNodeWithName("button1") as! MSButtonNode
         button2 = self.childNodeWithName("button2") as! MSButtonNode
         tutorialScreen = self.childNodeWithName("tutorialScreen") as! SKSpriteNode
+        
+        if let musicURL = NSBundle.mainBundle().URLForResource("mainMenu", withExtension: "mp3") {
+            backgroundMusic = SKAudioNode(URL: musicURL)
+            addChild(backgroundMusic)
+        }
         
         button1.selectedHandler =  {
             self.mode = .Single
