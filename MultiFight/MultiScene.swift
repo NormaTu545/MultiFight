@@ -14,6 +14,8 @@ class MultiScene: SKScene, UIGestureRecognizerDelegate {
     var cardBaseP2 : Card!
     var multipleOfP1 : SKLabelNode!
     var multipleOfP2 : SKLabelNode!
+    var doneLabelP1: SKLabelNode!
+    var doneLabelP2: SKLabelNode!
     var cardStackP1 : [Card] = []
     var cardStackP2 : [Card] = []
     
@@ -39,15 +41,13 @@ class MultiScene: SKScene, UIGestureRecognizerDelegate {
     }
     
     override func didMoveToView(view: SKView) {
-        //cardBaseP1 = self.childNodeWithName("cardBaseP1") as! Card
-        //cardBaseP2 = self.childNodeWithName("cardBaseP2") as! Card
         let cardSize = CGSize(width: 140, height: 140)
         cardBaseP1 = Card()
         cardBaseP1.position.x = 160
         cardBaseP1.position.y = 120
         cardBaseP1.size = cardSize
         cardBaseP1.color = UIColor.whiteColor()
-
+        
         
         cardBaseP2 = Card()
         cardBaseP2.position.x = 160
@@ -56,10 +56,13 @@ class MultiScene: SKScene, UIGestureRecognizerDelegate {
         cardBaseP2.xScale = -1
         cardBaseP2.yScale = -1
         cardBaseP2.color = UIColor.whiteColor()
-
+        
         
         multipleOfP1 = self.childNodeWithName("multipleOfP1") as! SKLabelNode
         multipleOfP2 = self.childNodeWithName("multipleOfP2") as! SKLabelNode
+        
+        doneLabelP1 = self.childNodeWithName("doneLabelP1") as! SKLabelNode
+        doneLabelP2 = self.childNodeWithName("doneLabelP2") as! SKLabelNode
         
         //Both players get a random starting multiple each
         randomMultipleP1 = Int(arc4random_uniform(8) + 2)
@@ -71,7 +74,7 @@ class MultiScene: SKScene, UIGestureRecognizerDelegate {
         cardStackP1 = setCardStack(true, cardBase: cardBaseP1)
         cardStackP2 = setCardStack(false, cardBase: cardBaseP2)
         //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
+        
         swipeRightUpper = UISwipeGestureRecognizer(target: self, action: #selector(MultiScene.swipedRightUpper(_:)))
         swipeRightUpper.direction = .Right
         
@@ -86,13 +89,13 @@ class MultiScene: SKScene, UIGestureRecognizerDelegate {
         swipeLeftLower.direction = .Left
         
         //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
+        
         
         tapUpper = UITapGestureRecognizer(target: self, action: #selector(MultiScene.onTapUpper(_:)))
         //view.addGestureRecognizer(tap)
         //tap.delegate = self
         tapLower = UITapGestureRecognizer(target: self, action: #selector(MultiScene.onTapLower(_:)))
-
+        
         
         GameViewController.topView.addGestureRecognizer(tapUpper)
         GameViewController.bottomView.addGestureRecognizer(tapLower)
@@ -106,7 +109,7 @@ class MultiScene: SKScene, UIGestureRecognizerDelegate {
     }
     
     //~~~~~~~~~~~~~~~~~~~~~~~TAP/SWIPE HANDLERS~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
+    
     
     func onTapUpper(sender: UITapGestureRecognizer) {
         //Player 2 side
@@ -117,7 +120,7 @@ class MultiScene: SKScene, UIGestureRecognizerDelegate {
         //Player 1 side
         removeCard("MoveDown", swipe: false, p1Action: true)
     }
-
+    
     
     func swipedRightUpper(sender:UISwipeGestureRecognizer){
         //Player 2 side
@@ -140,7 +143,7 @@ class MultiScene: SKScene, UIGestureRecognizerDelegate {
     }
     
     //~~~~~~~~~~~~~~~~~~~~~~~TAP/SWIPE HANDLERS~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
+    
     
     func moveCardStack(actionP1: Bool) {
         if actionP1 {
@@ -164,10 +167,16 @@ class MultiScene: SKScene, UIGestureRecognizerDelegate {
         if p1Action {
             firstCard = cardStackP1.first as Card!
             cardStackP1.removeFirst()
+            if cardStackP1.isEmpty {
+                endGame(true)
+            }
         }
         else {
             firstCard = cardStackP2.first as Card!
             cardStackP2.removeFirst()
+            if cardStackP1.isEmpty {
+                endGame(false)
+            }
         }
         
         //checkCard(firstCard, swipe: swipe)
@@ -200,9 +209,9 @@ class MultiScene: SKScene, UIGestureRecognizerDelegate {
         
     }
     
-    //This function returns a full & shuffled 20 card stack array 
+    //This function returns a full & shuffled 20 card stack array
     func setCardStack(addToP1: Bool, cardBase: Card) -> [Card] {
-
+        
         var cardStack: [Card] = []
         let wrongIntArray = fillWrongArray(addToP1)
         let correctIntArray = fillCorrectArray(addToP1)
@@ -241,7 +250,7 @@ class MultiScene: SKScene, UIGestureRecognizerDelegate {
         let shuffledStack = GKRandomSource.sharedRandom().arrayByShufflingObjectsInArray(cardStack) as! [Card]
         
         addCardsToScene(shuffledStack, p1: addToP1)
-
+        
         return shuffledStack
     }
     
@@ -283,7 +292,7 @@ class MultiScene: SKScene, UIGestureRecognizerDelegate {
         }
         
         var currentMultiple: Int = multiple
-
+        
         for _ in 0...9 {
             correctArray.append(currentMultiple)
             currentMultiple += multiple
@@ -292,15 +301,51 @@ class MultiScene: SKScene, UIGestureRecognizerDelegate {
         return correctArray
     }
     
-    
-    
-    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
-        for touch in touches {
-            // do something with this touch
+    func endGame(p1Finished: Bool) {
+        // player 1 done first
+        if p1Finished {
+            doneLabelP1.hidden = false
+            removeP1Functionality()
+            
+            // player 2 not done yet
+            if !cardStackP2.isEmpty {
+                //Start timer for p2
+                //Game over when timer is out for p2
+            }
+                // player 2 done at the same time as player 1
+            else {
+                gameState = .GameOver
+            }
         }
+            // player 2 finished first
+        else {
+            doneLabelP2.hidden = false
+            removeP2Functionality()
+            
+            // player 1 not done yet
+            if !cardStackP1.isEmpty {
+                //Start timer for p1
+                //Game Over when timer is out for p1
+            }
+                // player 1 done at same time as player 2
+            else {
+                gameState = .GameOver
+            }
+        }
+        
+        // if gameState == .GameOver, show end screen
+        // call gameOver function to do that
     }
     
+    func removeP1Functionality() {
+        GameViewController.bottomView.removeGestureRecognizer(tapLower)
+        GameViewController.bottomView.removeGestureRecognizer(swipeLeftLower)
+        GameViewController.bottomView.removeGestureRecognizer(swipeRightLower)
+    }
     
-    
-    
+    func removeP2Functionality() {
+        GameViewController.bottomView.removeGestureRecognizer(tapUpper)
+        GameViewController.bottomView.removeGestureRecognizer(swipeLeftUpper)
+        GameViewController.bottomView.removeGestureRecognizer(swipeRightUpper)
+    }
 }
