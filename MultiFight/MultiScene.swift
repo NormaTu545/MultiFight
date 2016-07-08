@@ -65,20 +65,16 @@ class MultiScene: SKScene, UIGestureRecognizerDelegate {
     
     override func didMoveToView(view: SKView) {
         let cardSize = CGSize(width: 140, height: 140)
-        cardBaseP1 = Card()
+        cardBaseP1 = Card(texture: SKTexture(imageNamed: "card"), color: UIColor.whiteColor(), size: cardSize)
         cardBaseP1.position.x = 160
         cardBaseP1.position.y = 120
-        cardBaseP1.size = cardSize
-        cardBaseP1.color = UIColor.whiteColor()
         cardBaseP1.name = "BaseP1"
         
-        cardBaseP2 = Card()
+        cardBaseP2 = Card(texture: SKTexture(imageNamed: "card"), color: UIColor.whiteColor(), size: cardSize)
         cardBaseP2.position.x = 160
         cardBaseP2.position.y = 450
-        cardBaseP2.size = cardSize
         cardBaseP2.xScale = -1
         cardBaseP2.yScale = -1
-        cardBaseP2.color = UIColor.whiteColor()
         cardBaseP2.name = "BaseP2"
 
         multipleOfP1 = self.childNodeWithName("multipleOfP1") as! SKLabelNode
@@ -222,14 +218,16 @@ class MultiScene: SKScene, UIGestureRecognizerDelegate {
             for node:Card in cardStackP1 {
                 node.runAction(SKAction.moveBy(CGVector(dx: -5, dy: 5), duration: 0.10))
                 
-                node.zPosition += 1
+                node.zPosition += 2
+                node.cardNumber.zPosition = node.zPosition + 1
             }
         }
         else {
             for node:Card in cardStackP2 {
                 node.runAction(SKAction.moveBy(CGVector(dx: 5, dy: -5), duration: 0.10))
                 
-                node.zPosition += 1
+                node.zPosition += 2
+                node.cardNumber.zPosition = node.zPosition + 1
             }
         }
     }
@@ -252,13 +250,16 @@ class MultiScene: SKScene, UIGestureRecognizerDelegate {
         }
         
         checkCard(firstCard, swipe: swipe, p1Action: p1Action)
-        firstCard?.zPosition += 1
+        firstCard?.zPosition += 2 //sets z position so that card swipes don't show next card too soon
         firstCard?.flip(actionName)
         
         moveCardStack(p1Action)
     }
     
     func checkCard(card: Card, swipe: Bool, p1Action: Bool) {
+        //can see color tint
+        card.colorBlendFactor = 1
+        
         if swipe {
             //Gives point if you swipe a non-multiple
             if card.number % randomMultiple != 0 {
@@ -301,7 +302,9 @@ class MultiScene: SKScene, UIGestureRecognizerDelegate {
             let lastPosition = lastCard.position
             let lastZPosition = lastCard.zPosition
             
-            newCard.zPosition = lastZPosition - 1
+            newCard.zPosition = lastZPosition - 2
+            newCard.cardNumber.zPosition = newCard.zPosition + 1
+            
             if p1 {
                 newCard.position = lastPosition + CGPoint(x: 5, y: -5)
             }
@@ -479,9 +482,9 @@ class MultiScene: SKScene, UIGestureRecognizerDelegate {
     }
     
     func removeP2Functionality() {
-        GameViewController.bottomView.removeGestureRecognizer(tapUpper)
-        GameViewController.bottomView.removeGestureRecognizer(swipeLeftUpper)
-        GameViewController.bottomView.removeGestureRecognizer(swipeRightUpper)
+        GameViewController.topView.removeGestureRecognizer(tapUpper)
+        GameViewController.topView.removeGestureRecognizer(swipeLeftUpper)
+        GameViewController.topView.removeGestureRecognizer(swipeRightUpper)
     }
     
     override func update(currentTime: NSTimeInterval) {

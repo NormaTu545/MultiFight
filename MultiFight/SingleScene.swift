@@ -138,7 +138,8 @@ class SingleScene: SKScene {
     func removeCard(actionName: String, swipe: Bool) {
         let firstCard = cardStack.first as Card!
         checkCard(firstCard, swipe: swipe)
-        firstCard?.zPosition += 1
+        firstCard?.zPosition += 2
+        firstCard?.cardNumber.zPosition = (firstCard?.zPosition)! + 1
         firstCard?.flip(actionName)
         
         cardStack.removeFirst()
@@ -147,6 +148,9 @@ class SingleScene: SKScene {
     }
     
     func checkCard(card: Card, swipe: Bool) {
+        //can see color tint
+        card.colorBlendFactor = 1
+        
         if swipe {
             //Gives point if you swipe a non-multiple
             if card.number % randomMultiple != 0 {
@@ -203,7 +207,8 @@ class SingleScene: SKScene {
         newCard.position = lastCardPosition + CGPoint(x: 15, y: -15) //Placing card behind
         
         let lastZposition = lastCard?.zPosition ?? cardBase.zPosition
-        newCard.zPosition = lastZposition - 1
+        newCard.zPosition = lastZposition - 2
+        newCard.cardNumber.zPosition = newCard.zPosition + 1
         
         newCard.number = number
         
@@ -236,7 +241,8 @@ class SingleScene: SKScene {
         for node:Card in cardStack {
             node.runAction(SKAction.moveBy(CGVector(dx: -15, dy: 15), duration: 0.10))
             
-            node.zPosition += 1
+            node.zPosition += 2
+            node.cardNumber.zPosition = node.zPosition + 1
         }
     }
     

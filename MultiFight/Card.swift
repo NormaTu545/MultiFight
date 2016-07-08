@@ -37,6 +37,7 @@ class Card: SKSpriteNode  {
         cardNumber.position.x = 0
         cardNumber.position.y = -20
         cardNumber.fontSize = 72
+        cardNumber.zPosition = 1
         addChild(cardNumber)
     }
     

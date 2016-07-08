@@ -13,16 +13,43 @@ enum GameState {
     case Ready, Playing, GameOver, PlayerFinished
 }
 
+enum Mode {
+    case None, Single, Multi
+}
+
 class MainMenu: SKScene {
     
     var button1 : MSButtonNode!
     var button2 : MSButtonNode!
+    var tutorialScreen: SKSpriteNode!
+    
+    var mode: Mode = .None
     
     override func didMoveToView(view: SKView) {
         button1 = self.childNodeWithName("button1") as! MSButtonNode
         button2 = self.childNodeWithName("button2") as! MSButtonNode
+        tutorialScreen = self.childNodeWithName("tutorialScreen") as! SKSpriteNode
         
         button1.selectedHandler =  {
+            self.mode = .Single
+            
+            let dropScreen = SKAction(named: "dropScreen")!
+            self.tutorialScreen.runAction(dropScreen)
+        }
+        
+        button2.selectedHandler = {
+            self.mode = .Multi
+            
+            let dropScreen = SKAction(named: "dropScreen")!
+            self.tutorialScreen.runAction(dropScreen)
+        }
+    }
+    
+    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+        if mode == .None {
+            return
+        }
+        else if mode == .Single {
             if let scene = SingleScene(fileNamed:"SingleScene") {
                 // Configure the view.
                 let skView = self.view!
@@ -38,8 +65,7 @@ class MainMenu: SKScene {
                 skView.presentScene(scene)
             }
         }
-        
-        button2.selectedHandler = {
+        else {
             if let scene = MultiScene(fileNamed:"MultiScene") {
                 // Configure the view.
                 let skView = self.view!
